@@ -2,7 +2,7 @@
 
 # This script generates a COMODO-CA lookalike cert that matches most of the same values of the real, selfsigned COMODO RSA certificate for use in cases where a client doesn't properly validate the server certificate presented. Use this in Burp (or wherever) to sign certificates for SSL/TLS.
 
-CONFIG="
+CONFIG=
 [req]
 distinguished_name=dn
 [ dn ]
@@ -11,10 +11,8 @@ subjectKeyIdentifier=hash
 keyUsage=critical,cRLSign,keyCertSign
 basicConstraints=critical,CA:TRUE
 "
-
 echo "[INFO] Generating new RSA key..."
 openssl genrsa -out cloned_root_ca_comodo.key 4096
-
 echo "[INFO] Generating self signed certificate..."
 openssl req -config <(echo "$CONFIG") -x509 -new -nodes -key cloned_root_ca_comodo.key -sha384 -days 7062 -out cloned_root_ca_comodo.crt -set_serial 0x4caaf9cadb636fe01ff74ed85b03869d -subj "/C=GB/ST=Greater Manchester/L=Salford/O=COMODO CA Limited/CN=COMODO RSA Certification Authority" -extensions ext
 
